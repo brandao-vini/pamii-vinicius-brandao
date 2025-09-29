@@ -152,3 +152,4 @@ Se você encontrar problemas, verifique os seguintes pontos que foram identifica
 -   **Botão carrega mas não navega**: A requisição à API está falhando. Verifique o console de depuração (abra com `Debug Remote JS`) para ver a mensagem de erro da API. O problema mais comum é a URL da API estar incorreta.
     
 -   **`Invalid prop 'style' supplied to 'React.Fragment'`**: Este erro indica que a propriedade `style` foi aplicada a um `<React.Fragment>`. Lembre-se de que Fragments não aceitam estilos; use um `<View>` em vez disso.
+  
