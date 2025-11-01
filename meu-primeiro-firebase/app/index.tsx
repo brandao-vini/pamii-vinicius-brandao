@@ -6,18 +6,29 @@ import { FlatList, Text, View, StyleSheet, Platform, ActivityIndicator } from 'r
 
 // Seus detalhes de configuração do Firebase (Inalterados)
 const firebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+  apiKey: "AIzaSyDnr-GMj1fBAc50U7ANMLDhHqhPaZAd7SE",
+  authDomain: "meu-primeiro-firebase-3f0f2.firebaseapp.com",
+  projectId: "meu-primeiro-firebase-3f0f2",
+  storageBucket: "meu-primeiro-firebase-3f0f2.firebasestorage.app",
+  messagingSenderId: "768029100921",
+  appId: "1:768029100921:web:93e1804f05b0bf125a7da8"
 };
 
+// Inicialização única e correta
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 
-// Inicializações (Inalteradas)
-const app = initializeApp(firebaseConfig);
-firebase.initializeApp(firebaseConfig);
+// ------------------------------------
+// DEFINIÇÃO DA PALETA DE CORES (Movida para o topo, é opcional, mas ajuda na leitura)
+// ------------------------------------
+const COLORS = {
+    ROXO_ESCURO: '#4B0082',    // Roxo Sólido (Fundo)
+    VERDE_AGUA: '#00FFFF',     // Ciano/Verde Água (Acento/Destaque)
+    ROSA_BEBE: '#FFC0CB',      // Rosa Bebê (Detalhes)
+    BRANCO_CLARO: '#F8F8FF',   // Para textos em fundo escuro
+};
+
 
 // Componente principal
 export default function App() {
@@ -28,7 +39,6 @@ export default function App() {
     const fetchData = async () => {
       try {
         const nomesCollection = firebase.firestore().collection('Nomes');
-        // Mantendo a ordenação pelo Nome em ordem alfabética (A-Z)
         const query = nomesCollection.orderBy('Nome', 'asc'); 
         const snapshot = await query.get();
         
@@ -57,33 +67,29 @@ export default function App() {
     );
   }
 
-  // Componente para renderizar o item da lista
+  // Componente para renderizar o item da lista (Layout Linear e Limpo)
   const renderItem = ({ item, index }) => (
-    <View style={[
-      styles.itemContainer, 
-      // Alternando entre dois tons de rosa bebê para contraste sutil
-      index % 2 === 0 ? styles.itemEven : styles.itemOdd
-    ]}>
+    <View style={styles.itemContainer}>
       
-      {/* Ícone ou Emoticon para simular o avatar/perfil */}
-      <View style={styles.iconCircle}>
-        <Text style={styles.iconText}>🌸</Text> {/* Mudei para uma flor para combinar com o tema fofo */}
-      </View>
+      {/* Indicador de Ordem Numerada */}
+      <Text style={styles.itemIndex}>{index + 1}.</Text>
 
       <View style={styles.textWrapper}>
         <Text style={styles.nomeCompleto}>
           {item.Nome} <Text style={styles.sobrenome}>{item.Sobrenome}</Text>
         </Text>
         
-        <Text style={styles.detalhe}>ID: {item.id.substring(0, 5)}...</Text>
+        <Text style={styles.detalhe}>ID: {item.id.substring(0, 8)}</Text>
       </View>
       
+      {/* Acento Simples */}
+      <View style={styles.separatorLine} />
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.tituloLista}>{'< Lista Rosa & Roxo />'}</Text>
+      <Text style={styles.tituloLista}>Lista Ordenadaa</Text>
       
       {nomes.length === 0 ? (
         <View style={styles.emptyList}>
@@ -102,31 +108,19 @@ export default function App() {
   );
 }
 
-// ------------------------------------
-// DEFINIÇÃO DA NOVA PALETA DE CORES
-// ------------------------------------
-const COLORS = {
-    ROXO_ESCURO: '#6A5ACD', // Slate Blue (Roxo Suave)
-    ROXO_CLARO: '#9370DB',  // Medium Purple
-    VERDE_AGUA: '#7FFFD4',  // Aquamarine (Acento Brilhante)
-    ROSA_BEBE_CLARO: '#FBEFF8', // Quase Branco com toque rosa
-    ROSA_BEBE_ESCURO: '#FFC0CB', // Pink (Rosa mais forte para contraste)
-    TEXTO_ESCURO: '#333333',
-};
-
 
 // ------------------------------------
-// ## Folha de Estilos (StyleSheet)
+// ## Folha de Estilos (Minimalista e Limpa)
 // ------------------------------------
 const styles = StyleSheet.create({
   // Fundo e Estrutura
   container: {
     flex: 1, 
-    backgroundColor: COLORS.ROXO_ESCURO, // Roxo Principal
+    backgroundColor: COLORS.ROXO_ESCURO,
     paddingTop: Platform.OS === 'android' ? 30 : 50,
   },
 
-  // Indicador de Carregamento
+  // Carregamento
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -135,22 +129,23 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 10,
-    color: COLORS.VERDE_AGUA, // Verde Água para destaque
+    color: COLORS.VERDE_AGUA,
     fontSize: 16,
     fontWeight: '600',
   },
   
   // Título
   tituloLista: {
-    fontSize: 24,
-    fontWeight: '900',
-    color: COLORS.VERDE_AGUA, // Verde Água (Acento Principal)
+    fontSize: 28,
+    fontWeight: '700',
+    letterSpacing: 3,
+    color: COLORS.VERDE_AGUA, // Destaque Verde Água
     textAlign: 'center',
     marginBottom: 20,
     paddingVertical: 10,
-    borderBottomWidth: 3,
-    borderBottomColor: COLORS.ROXO_CLARO, 
-    marginHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.BRANCO_CLARO, // Linha de separação discreta
+    marginHorizontal: 20,
   },
 
   // FlatList
@@ -158,52 +153,27 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   flatListContent: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 20, // Padding lateral maior
     paddingBottom: 30,
   },
   
-  // Item da Lista (Card - Rosa Bebê)
+  // Item da Lista (Sem Fundo/Sombra)
   itemContainer: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
-    borderRadius: 12, 
-    marginBottom: 12,
-    
-    // Sombra para dar profundidade
-    ...Platform.select({
-      ios: {
-        shadowColor: COLORS.TEXTO_ESCURO,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 5,
-      },
-    }),
-  },
-  itemEven: {
-    backgroundColor: COLORS.ROSA_BEBE_CLARO, // Rosa Bebê mais claro
-  },
-  itemOdd: {
-    backgroundColor: COLORS.ROSA_BEBE_ESCURO, // Rosa Bebê mais escuro (para contraste)
+    paddingVertical: 15,
+    borderBottomWidth: 1, // Acento de Linha para separar itens
+    borderBottomColor: 'rgba(255, 255, 255, 0.1)', // Linha muito sutil
   },
 
-  // Ícone/Avatar
-  iconCircle: {
-    width: 45,
-    height: 45,
-    borderRadius: 22.5,
-    backgroundColor: COLORS.VERDE_AGUA, // Círculo Verde Água
-    justifyContent: 'center',
-    alignItems: 'center',
+  // Número de Ordem (Novo)
+  itemIndex: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: COLORS.VERDE_AGUA, // Número em Verde Água
+    width: 30, // Largura fixa para alinhamento
+    textAlign: 'left',
     marginRight: 15,
-  },
-  iconText: {
-    fontSize: 28, // Emoji um pouco maior
-    lineHeight: 30,
-    color: COLORS.ROXO_ESCURO, // Cor do ícone (Roxo)
   },
 
   // Textos
@@ -211,27 +181,28 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   nomeCompleto: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: COLORS.TEXTO_ESCURO, // Texto principal escuro para contraste com o rosa
+    fontSize: 17,
+    fontWeight: '600',
+    color: COLORS.BRANCO_CLARO, // Texto principal Branco
   },
   sobrenome: {
-    fontWeight: '400', 
-    color: COLORS.ROXO_ESCURO, // Sobrenome em Roxo para destaque
+    fontWeight: '300', 
+    color: COLORS.ROSA_BEBE, // Sobrenome em Rosa Bebê (Suave)
   },
   detalhe: {
     fontSize: 12,
-    color: COLORS.ROXO_CLARO, // Detalhe em Roxo Claro
+    color: COLORS.ROSA_BEBE, // Detalhe em Rosa Bebê
+    opacity: 0.8,
     marginTop: 2,
   },
-
+  
   // Lista Vazia
   emptyList: {
     padding: 50,
     alignItems: 'center',
   },
   emptyText: {
-    color: COLORS.ROSA_BEBE_CLARO,
+    color: COLORS.BRANCO_CLARO,
     fontSize: 16,
     textAlign: 'center',
   }
